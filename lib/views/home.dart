@@ -72,36 +72,39 @@ class Home extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 4),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      tileColor: bgColour,
-                      title: Text(
-                        "${snapshot.data![index].displayNameWOExt}",
-                        style: ourStyle(size: 15),
-                      ),
-                      subtitle: Text(
-                        "${snapshot.data![index].artist}",
-                        style: ourStyle(size: 12),
-                      ),
-                      leading: QueryArtworkWidget(
-                        id: snapshot.data![index].id,
-                        type: ArtworkType.AUDIO,
-                        nullArtworkWidget: const Icon(
-                          Icons.music_note,
-                          color: whiteColour,
-                          size: 32,
+                    child: Obx(()=>
+                       ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
+                        tileColor: bgColour,
+                        title: Text(
+                          "${snapshot.data![index].displayNameWOExt}",
+                          style: ourStyle(size: 15),
+                        ),
+                        subtitle: Text(
+                          "${snapshot.data![index].artist}",
+                          style: ourStyle(size: 12),
+                        ),
+                        leading: QueryArtworkWidget(
+                          id: snapshot.data![index].id,
+                          type: ArtworkType.AUDIO,
+                          nullArtworkWidget: const Icon(
+                            Icons.music_note,
+                            color: whiteColour,
+                            size: 32,
+                          ),
+                        ),
+                        trailing: controller.playIndex.value == index && controller.isplaying.value
+                        ? const Icon(
+                          Icons.play_arrow,
+                          color: whiteColour,
+                          size: 26,
+                        ):null,
+                        onTap: () {
+                          controller.playSong(snapshot.data![index].uri,index);
+                        },
                       ),
-                      trailing: const Icon(
-                        Icons.play_arrow,
-                        color: whiteColour,
-                        size: 26,
-                      ),
-                      onTap: () {
-                        controller.playSong(snapshot.data![index].uri);
-                      },
                     ),
                   );
                 },
