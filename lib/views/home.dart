@@ -5,6 +5,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:vibes/constant/colours.dart';
 import 'package:vibes/constant/text_style.dart';
 import 'package:vibes/controller/player_controller.dart';
+import 'package:vibes/views/player.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key});
@@ -72,8 +73,8 @@ class Home extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 4),
-                    child: Obx(()=>
-                       ListTile(
+                    child: Obx(
+                      () => ListTile(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -95,14 +96,17 @@ class Home extends StatelessWidget {
                             size: 32,
                           ),
                         ),
-                        trailing: controller.playIndex.value == index && controller.isplaying.value
-                        ? const Icon(
-                          Icons.play_arrow,
-                          color: whiteColour,
-                          size: 26,
-                        ):null,
+                        trailing: controller.playIndex.value == index &&
+                                controller.isplaying.value
+                            ? const Icon(
+                                Icons.play_arrow,
+                                color: whiteColour,
+                                size: 26,
+                              )
+                            : null,
                         onTap: () {
-                          controller.playSong(snapshot.data![index].uri,index);
+                          Get.to(() => Player());
+                          // controller.playSong(snapshot.data![index].uri,index);
                         },
                       ),
                     ),
