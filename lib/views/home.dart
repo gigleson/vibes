@@ -82,19 +82,26 @@ class Home extends StatelessWidget {
                         style: ourStyle(size: 15),
                       ),
                       subtitle: Text(
-                       "${snapshot.data![index].artist}",
+                        "${snapshot.data![index].artist}",
                         style: ourStyle(size: 12),
                       ),
-                      leading: Icon(
-                        Icons.music_note,
-                        color: whiteColour,
-                        size: 32,
+                      leading: QueryArtworkWidget(
+                        id: snapshot.data![index].id,
+                        type: ArtworkType.AUDIO,
+                        nullArtworkWidget: const Icon(
+                          Icons.music_note,
+                          color: whiteColour,
+                          size: 32,
+                        ),
                       ),
                       trailing: const Icon(
                         Icons.play_arrow,
                         color: whiteColour,
                         size: 26,
                       ),
+                      onTap: () {
+                        controller.playSong(snapshot.data![index].uri);
+                      },
                     ),
                   );
                 },
