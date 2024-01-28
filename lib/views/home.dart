@@ -23,13 +23,13 @@ class Home extends StatelessWidget {
             onPressed: () {
               // Implement search functionality
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.search,
               color: bgColour,
             ),
           ),
         ],
-        leading: Icon(
+        leading: const Icon(
           Icons.sort_rounded,
           color: bgColour,
         ),
@@ -105,8 +105,10 @@ class Home extends StatelessWidget {
                               )
                             : null,
                         onTap: () {
-                          Get.to(() => Player());
-                          // controller.playSong(snapshot.data![index].uri,index);
+                          Get.to(() => Player(data: snapshot.data,)
+                          ,
+                          transition: Transition.downToUp);
+                          controller.playSong(snapshot.data![index].uri,index);
                         },
                       ),
                     ),
