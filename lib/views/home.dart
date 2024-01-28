@@ -4,7 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:vibes/constant/colours.dart';
 import 'package:vibes/constant/text_style.dart';
-import 'package:vibes/controller/player_controller.dart';
+import 'package:vibes/viewModel/player_controller.dart';
 import 'package:vibes/views/player.dart';
 
 class Home extends StatelessWidget {
