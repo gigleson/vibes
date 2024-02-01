@@ -1,5 +1,8 @@
+// signup_page.dart
 import 'package:flutter/material.dart';
-import 'package:vibes/repo/auth_service.dart';
+import 'package:vibes/models/user_model.dart';
+
+import 'package:vibes/viewModel/authVM.dart';
 
 
 class SignupPage extends StatefulWidget {
@@ -10,8 +13,7 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  AuthService _authService = AuthService();
+  final AuthViewModel _viewModel = AuthViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -35,52 +37,7 @@ class _SignupPageState extends State<SignupPage> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () async {
-                String email = _emailController.text.trim();
-                String password = _passwordController.text.trim();
-
-                if (email.isNotEmpty && password.isNotEmpty) {
-                  // Call the authentication service to sign up
-                  bool success = await _authService.createUserWithEmailAndPassword(email, password);
-
-                  if (success) {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      "/login",
-                    );
-                  } else {
-                    // Handle sign up failure
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Sign Up Failed'),
-                        content: Text('Failed to create an account. Please try again.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                } else {
-                  // Handle empty email or password
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Error'),
-                      content: Text('Please enter both email and password.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
+              onPressed: () => _handleSignUp(),
               child: Text('Sign Up'),
             ),
             TextButton(
@@ -93,5 +50,32 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
+  }
+
+  void _handleSignUp() async {
+    AuthModel authModel = AuthModel(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    bool success = await _viewModel.signUp(authModel);
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, "/login");
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Sign Up Failed'),
+          content: Text('Failed to create an account. Please try again.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

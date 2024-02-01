@@ -7,6 +7,7 @@ import 'package:vibes/constant/text_style.dart';
 import 'package:vibes/viewModel/player_controller.dart';
 import 'package:vibes/views/player.dart';
 
+
 class Home extends StatelessWidget {
   const Home({Key? key});
 
@@ -29,10 +30,19 @@ class Home extends StatelessWidget {
             ),
           ),
         ],
-        leading: const Icon(
+        leading:Builder(
+    builder: (BuildContext context) {
+      return IconButton(
+        onPressed: () {
+          Scaffold.of(context).openDrawer(); // Open the drawer
+        },
+        icon: const Icon(
           Icons.sort_rounded,
           color: bgColour,
         ),
+      );
+    },
+  ),
         title: Text(
           "Vibes", // Use a dynamic title or retrieve it from a configuration
           style: ourStyle(size: 18),
@@ -45,6 +55,7 @@ class Home extends StatelessWidget {
           sortType: null,
           uriType: UriType.EXTERNAL,
         ),
+        
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -118,6 +129,19 @@ class Home extends StatelessWidget {
             );
           }
         },
+      ),
+           drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              title: Text('Upload Song'),
+              onTap: () {
+                // Navigate to the upload screen
+                
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

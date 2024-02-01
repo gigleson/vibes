@@ -1,6 +1,7 @@
-// login_view.dart
+// login_page.dart
 import 'package:flutter/material.dart';
-import 'package:vibes/repo/auth_service.dart';
+import 'package:vibes/models/user_model.dart';
+import 'package:vibes/viewModel/authVM.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -11,8 +12,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  AuthService _authService = AuthService();
+  final AuthViewModel _viewModel = AuthViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -36,60 +36,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () async {
-                String email = _emailController.text.trim();
-                String password = _passwordController.text.trim();
-
-                if (email.isNotEmpty && password.isNotEmpty) {
-                  // Call the authentication service to sign in
-                  bool success = await _authService.signInWithEmailAndPassword(email, password);
-
-                  if (success) {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      "/home",
-                    );
-                  } else {
-                    // Handle login failure
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Login Failed'),
-                        content: Text('Invalid email or password.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                } else {
-                  // Handle empty email or password
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Error'),
-                      content: Text('Please enter both email and password.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
+              onPressed: () => _handleLogin(),
               child: Text('Login'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  "/signup",
-                );
+                Navigator.pushNamed(context, "/signup");
               },
               child: Text('Don\'t have an account? Sign up'),
             ),
@@ -97,5 +49,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void _handleLogin() async {
+    AuthModel authModel = AuthModel(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    bool success = await _viewModel.signIn(authModel);
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, "/home");
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Login Failed'),
+          content: Text('Invalid email or password.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
