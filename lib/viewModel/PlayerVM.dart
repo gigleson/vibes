@@ -1,10 +1,12 @@
 // player_view_model.dart
 import 'package:get/get.dart';
+import 'package:vibes/models/song.dart';
 import 'package:vibes/repo/song_repo.dart';
 
 
 class PlayerViewModel extends GetxController {
   final SongRepository _songRepository = SongRepository();
+  List<SongModel> songs = <SongModel>[].obs;
 
   Future<void> uploadSong({
     required String title,
@@ -22,4 +24,14 @@ class PlayerViewModel extends GetxController {
       rethrow; // Rethrow the error for handling in the calling code
     }
   }
+  Future<void> loadSongs() async {
+    try {
+      songs.assignAll(await _songRepository.getSongs());
+    } catch (e) {
+      print('Error loading songs: $e');
+    }
+  }
 }
+
+
+

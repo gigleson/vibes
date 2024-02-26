@@ -4,8 +4,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:vibes/constant/colours.dart';
 import 'package:vibes/constant/text_style.dart';
+import 'package:vibes/viewModel/PlayerVM.dart';
 import 'package:vibes/viewModel/player_controller.dart';
 import 'package:vibes/views/player.dart';
+import 'package:vibes/views/playlist.dart';
 
 
 class Home extends StatelessWidget {
@@ -14,6 +16,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(PlayerController());
+    var vm= Get.put(PlayerViewModel());
 
     return Scaffold(
       backgroundColor: bgdarkColour,
@@ -134,8 +137,11 @@ class Home extends StatelessWidget {
         child: ListView(
           children: [
             ListTile(
-              title: Text('Upload Song'),
-              onTap: () {
+              title: Text('Plalist Song'),
+              onTap: () async{
+                await vm.loadSongs();
+                Get.to(() => PlaylistPage(playlist: vm.songs),
+                    transition: Transition.downToUp);
                 // Navigate to the upload screen
                 
               },
