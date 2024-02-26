@@ -11,7 +11,29 @@ class Player extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     var controller = Get.find<PlayerController>();
+
+    void _handleUploadButtonPressed(BuildContext context) async {
+      // Replace with your logic to get information about the current song
+      String title = data[controller.playIndex.value].title;
+      String? artist = data[controller.playIndex.value].artist.toString();
+      String? url = data[controller.playIndex.value].uri.toString();
+
+      // Call the uploadSong method from PlayerController
+      await controller.uploadSong(
+        title: title,
+        artist: artist,
+        url: url,
+      );
+
+      // Optionally, you can add logic here to handle the result of the upload
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Song uploaded successfully!'),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: bgColour,
       appBar: AppBar(),
@@ -151,11 +173,17 @@ class Player extends StatelessWidget {
                         color: bgdarkColour,
                       )),
                 ],
-              )
+              ),
+            ElevatedButton(onPressed: () => _handleUploadButtonPressed(context), child: Text('Upload Song'))
             ]),
           ),
-        ))
-      ]),
+        ),
+
+        ),
+
+      ],
+
+      ),
     );
   }
 }

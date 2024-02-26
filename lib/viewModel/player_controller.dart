@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vibes/viewModel/PlayerVM.dart';
 
 class PlayerController extends GetxController {
   final audiQuery = OnAudioQuery();
   final audioPlayer = AudioPlayer();
+  final PlayerViewModel _playerViewModel = PlayerViewModel();
   var playIndex = 0.obs;
   var isplaying = false.obs;
 
@@ -55,6 +57,22 @@ class PlayerController extends GetxController {
     if (perm.isGranted) {
     } else {
       checkPermission();
+    }
+  }
+  Future<void> uploadSong({
+    required String title,
+    required String artist,
+    required String url,
+  }) async {
+    try {
+      await _playerViewModel.uploadSong(
+        title: title,
+        artist: artist,
+        url: url,
+      );
+    } catch (e) {
+      print('Error uploading song: $e');
+      // Handle the error as needed (e.g., show a message to the user)
     }
   }
 }
